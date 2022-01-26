@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Digicollect</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+	<style type="text/css">
+		body{
+			margin: 0;
+			padding: 0;
+			font-family: Montserrat;
+		}
+		.menuContainer {
+			display: flex;
+			align-items: center;
+			    background: #049fd9;
+    color: #fff;
+		}
+		.menuList{
+			divst-style: none;
+			display: flex;
+			/*justify-content: space-between;*/
+			padding: 0;
+		}
+		.anchorLink a{
+			color: #fff;
+			padding: 0 10px;
+			display: inline-block;
+			text-decoration: none;
+		}
+		.listItem{
+			white-space: nowrap;
+			padding: 8px 10px;
+			cursor: pointer;
+		}
+		.listItem.active{
+			background: #fff;
+    color: #049fd9;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+		}
+		/*.moreList:hover #moreItem{
+			display: block;
+		}*/
+		#moreItem {
+			display: none;
+		    position: absolute;
+		    right: 0px;
+		    top: 30px;
+		    background: #000;
+		}
+		.d-flex{
+			display: flex;
+		}
+		p{
+			margin: 0;
+			padding: 0;
+		}
+		.moreList{
+			position: relative;
+			padding: 8px 10px;
+		}
+		.toolBar{
+			justify-content: space-between;
+			background: #049fd9;
+    		color: #fff;
+    		padding: 15px 10px;
+    		align-items: center;
+		}
+		.isp{
+			background: green;
+    padding: 2px 7px;
+    border: 1px solid #fff;
+    border-radius: 6px;
+		}
+		.profileLink a{
+			color: #fff;
+			padding: 0 10px;
+			display: inline-block;
+			text-decoration: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="toolBar d-flex">
+		<div class="brand">
+			 <p>DigiCollect <i class="fa fa-th-large"></i></p>
+		</div>
+		<div class="toolName">
+			<p>DigiHRMS</p>
+		</div>
+		<div class="tools d-flex">
+			<div class="isp">
+				<span>ISP</span>
+			</div>
+			<div class="iconHref">
+				<div class="anchorLink">
+					<a href="#"><i class="fa fa-search"></i></a>
+					<a href="#"><i class="fa fa-bell"></i></a>
+					<a href="#"><i class="fa fa-th-large"></i></a>
+				</div>
+			</div>
+			<div class="profileLink">
+				<a href="#">Manu S <i class="fa fa-angle-down"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="menuContainer">
+<div class="menuList">
+	<div class="listItem"><i class="fa fa-th-large"></i> Dashboard <i class="fa fa-angle-down"></i></div>
+	<div class="listItem active"><i class="fa fa-th"></i> Company info <i class="fa fa-angle-down"></i></div>
+	<div class="listItem"><i class="fa fa-th"></i> Employee info <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Job Portal <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Payroll <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Attendence <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Benefits <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Policies <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Analytics <i class="fa fa-angle-down"></i></div>
+	<div class="listItem">Settings <i class="fa fa-angle-down"></i></div>
+</div>
+<div class="moreList" style="display: none;">
+		More <div id="moreItem"></div>
+	</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+ function toggleMoreItem() {
+ 	if ($("#moreItem .listItem").length > 0) {
+ 		$(".moreList").css('display','block');
+ 	} else {
+ 		$(".moreList").css('display','none');
+ 	}
+ }	
+
+ function getMenuWidth() {
+ 	let menuWidth = 0;
+ 	let allMenuItem = document.querySelectorAll(".menuList .listItem");
+ 	allMenuItem.forEach(ele => {menuWidth += ele.offsetWidth});
+ 	menuWidth += 50;
+ 	return menuWidth;
+ } 
+
+ function getContainerWidth() {
+ 	return $('.menuContainer').innerWidth();
+ }
+
+ let debounce = null;	 
+ $(window).resize(function(e){		
+ 	// hideMenu();
+ 	//showMenu();
+ 	clearInterval(debounce);
+ 	debounce = setTimeout(() => {renderMenu()}, 400)
+ })
+ function renderMenu(){
+ 	while (getMenuWidth() > getContainerWidth()) {
+	 		let allMenuItems = document.querySelectorAll(".menuList .listItem");
+	 		let lastElement = allMenuItems[allMenuItems.length - 1];
+	 		document.querySelector("#moreItem").prepend(lastElement.cloneNode(true));
+	 		lastElement.remove();
+	 	} 
+
+	 	while ((getMenuWidth() + 100) < getContainerWidth()) {
+	 		let allMoreItems = document.querySelectorAll("#moreItem .listItem");
+	 		let lastElement = allMoreItems[0];
+	 		document.querySelector(".menuList").appendChild(lastElement.cloneNode(true));
+	 		lastElement.remove();
+	 	}
+
+ 	toggleMoreItem();
+ }
+ renderMenu()
+});
+	$('.moreList').hover(
+         function () {
+           $(this).find('#moreItem').fadeIn();
+         }, 
+         function () {
+            $(this).find('#moreItem').fadeOut();
+         }
+     );
+</script>
+</body>
+</html>
